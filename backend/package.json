@@ -11,7 +11,8 @@
     "prisma:migrate": "prisma migrate dev --schema=src/database/prisma/schema.prisma",
     "prisma:studio": "prisma studio --schema=src/database/prisma/schema.prisma",
     "test": "bun test --timeout 20000",
-    "prisma:seed": "bun run src/database/prisma/seed.ts"
+    "prisma:seed": "bun run src/database/prisma/seed.ts",
+    "postinstall": "prisma generate --schema=src/database/prisma/schema.prisma"
   },
   "prisma": {
     "seed": "bun run src/database/prisma/seed.ts"
