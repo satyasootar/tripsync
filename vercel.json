@@ -1,15 +1,12 @@
 {
-    "experimentalServices": {
-        "frontend": {
-            "entrypoint": "frontend",
-            "routePrefix": "/",
-            "framework": "vite"
-        },
-        "backend": {
-            "entrypoint": "backend",
-            "routePrefix": "/_/backend"
+    "buildCommand": "cd frontend && bun run build && cd ../backend && bun run build",
+    "outputDirectory": "frontend/dist",
+    "rewrites": [
+        {
+            "source": "/_/backend/:path*",
+            "destination": "/backend/dist/index"
         }
-    },
+    ],
     "functions": {
         "backend/dist/index.js": {
             "runtime": "nodejs18.x"
