@@ -1,0 +1,45 @@
+# Collaborative Trip Planning Backend
+
+## Overview
+A production-grade, modular backend for a collaborative trip planning platform.
+Built with: Express.js, TypeScript, Prisma, PostgreSQL (Neon DB), Bun.
+
+## Architecture
+Strict layered architecture with the following pattern:
+- **Modules**: Feature-based folders containing controllers, services, repositories, routes, DTOs, and validation schemas.
+- **Common**: Shared errors, responses, and permission logic.
+- **Middlewares**: Auth, error handling, validation, and security.
+- **Utils**: Reusable helper functions.
+- **Config**: Database, CORS, and Swagger settings.
+
+## Database Schema
+10+ tables including:
+- `User`: Profile and authentication.
+- `Trip`: Central entity for planning.
+- `TripMember`: Junction for user roles in trips (OWNER, EDITOR, VIEWER).
+- `Day` & `Activity`: Itinerary structure.
+- `Expense` & `ExpenseParticipant`: Budgeting and split logic.
+- `Comment`, `Checklist`, `Attachment`, `Reservation`: Collaboration tools.
+
+## Implementation Progress
+- [x] Step 1: Project Restructure & Dependencies
+- [x] Step 2: Source Directory Structure
+- [x] Step 3: Prisma Schema Design
+- [x] Step 4: Database Migration (Neon DB)
+- [x] Step 5: Core Infrastructure (Errors, Responses, Utils, Middlewares)
+- [x] Step 6: Auth Module
+
+- [x] Step 7: Users Module
+
+- [x] Step 8: Trips Module
+
+- [x] Step 9: Members & Invites Module
+
+- [x] Step 10: Days & Activities Module
+- [x] Step 11: Comments Module
+- [x] Step 12: Checklists Module
+- [x] Step 13: Attachments & Reservations Module
+- [x] Step 14: Expenses Module
+- [x] Step 15: Swagger Documentation
+- [x] Step 16: Testing Structure
+- [x] Step 17: Final Cleanup

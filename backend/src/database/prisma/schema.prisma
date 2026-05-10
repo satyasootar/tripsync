@@ -1,0 +1,246 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                       String               @id @default(uuid())
+  email                    String               @unique
+  password                 String
+  firstName                String
+  lastName                 String
+  avatarUrl                String?
+  createdAt                DateTime             @default(now())
+  updatedAt                DateTime             @updatedAt
+  checklistItemAssignments ChecklistItem[]
+  comments                 Comment[]
+  expenses                 Expense[]
+  expenseShares            ExpenseParticipant[]
+  invites                  Invite[]
+  trips                    Trip[]               @relation("UserTrips")
+  memberships              TripMember[]
+}
+
+model Trip {
+  id           String         @id @default(uuid())
+  title        String
+  description  String?
+  startDate    DateTime
+  endDate      DateTime
+  destination  String
+  visibility   TripVisibility @default(PRIVATE)
+  ownerId      String
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  attachments  Attachment[]
+  checklists   Checklist[]
+  days         Day[]
+  expenses     Expense[]
+  invites      Invite[]
+  reservations Reservation[]
+  owner        User           @relation("UserTrips", fields: [ownerId], references: [id])
+  members      TripMember[]
+
+  @@index([ownerId])
+}
+
+model TripMember {
+  id        String     @id @default(uuid())
+  tripId    String
+  userId    String
+  role      MemberRole @default(VIEWER)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  trip      Trip       @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([tripId, userId])
+}
+
+model Invite {
+  id        String       @id @default(uuid())
+  tripId    String
+  email     String
+  role      MemberRole   @default(VIEWER)
+  status    InviteStatus @default(PENDING)
+  inviterId String
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+  inviter   User         @relation(fields: [inviterId], references: [id])
+  trip      Trip         @relation(fields: [tripId], references: [id], onDelete: Cascade)
+
+  @@unique([tripId, email])
+}
+
+model Day {
+  id         String     @id @default(uuid())
+  tripId     String
+  date       DateTime
+  position   Int
+  activities Activity[]
+  comments   Comment[]
+  trip       Trip       @relation(fields: [tripId], references: [id], onDelete: Cascade)
+
+  @@index([tripId, position])
+}
+
+model Activity {
+  id          String         @id @default(uuid())
+  dayId       String
+  title       String
+  description String?
+  startTime   DateTime?
+  endTime     DateTime?
+  location    String?
+  status      ActivityStatus @default(PLANNED)
+  position    Int
+  day         Day            @relation(fields: [dayId], references: [id], onDelete: Cascade)
+  comments    Comment[]
+
+  @@index([dayId, position])
+}
+
+model Comment {
+  id         String    @id @default(uuid())
+  content    String
+  userId     String
+  dayId      String?
+  activityId String?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  activity   Activity? @relation(fields: [activityId], references: [id], onDelete: Cascade)
+  day        Day?      @relation(fields: [dayId], references: [id], onDelete: Cascade)
+  user       User      @relation(fields: [userId], references: [id])
+
+  @@index([dayId])
+  @@index([activityId])
+  @@index([userId])
+}
+
+model Checklist {
+  id        String          @id @default(uuid())
+  tripId    String
+  title     String
+  type      ChecklistType   @default(TODO)
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+  trip      Trip            @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  items     ChecklistItem[]
+}
+
+model ChecklistItem {
+  id          String    @id @default(uuid())
+  checklistId String
+  content     String
+  isCompleted Boolean   @default(false)
+  assignedTo  String?
+  position    Int
+  assignee    User?     @relation(fields: [assignedTo], references: [id])
+  checklist   Checklist @relation(fields: [checklistId], references: [id], onDelete: Cascade)
+
+  @@index([checklistId, position])
+}
+
+model Attachment {
+  id        String   @id @default(uuid())
+  tripId    String
+  name      String
+  url       String
+  type      String
+  size      Int
+  createdAt DateTime @default(now())
+  trip      Trip     @relation(fields: [tripId], references: [id], onDelete: Cascade)
+
+  @@index([tripId])
+}
+
+model Reservation {
+  id             String          @id @default(uuid())
+  tripId         String
+  type           ReservationType
+  title          String
+  confirmationNo String?
+  startDate      DateTime?
+  endDate        DateTime?
+  location       String?
+  notes          String?
+  trip           Trip            @relation(fields: [tripId], references: [id], onDelete: Cascade)
+
+  @@index([tripId])
+}
+
+model Expense {
+  id           String               @id @default(uuid())
+  tripId       String
+  amount       Decimal              @db.Decimal(12, 2)
+  currency     String               @default("USD")
+  description  String
+  date         DateTime             @default(now())
+  paidById     String
+  splitType    SplitType            @default(EQUAL)
+  paidBy       User                 @relation(fields: [paidById], references: [id])
+  trip         Trip                 @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  participants ExpenseParticipant[]
+
+  @@index([tripId])
+  @@index([paidById])
+}
+
+model ExpenseParticipant {
+  id        String  @id @default(uuid())
+  expenseId String
+  userId    String
+  amount    Decimal @db.Decimal(12, 2)
+  expense   Expense @relation(fields: [expenseId], references: [id], onDelete: Cascade)
+  user      User    @relation(fields: [userId], references: [id])
+
+  @@unique([expenseId, userId])
+}
+
+enum TripVisibility {
+  PRIVATE
+  SHARED
+}
+
+enum ActivityStatus {
+  PLANNED
+  CONFIRMED
+  COMPLETED
+  CANCELLED
+}
+
+enum ChecklistType {
+  PACKING
+  TODO
+  CUSTOM
+}
+
+enum ReservationType {
+  FLIGHT
+  HOTEL
+  TRAIN
+  BUS
+  EVENT
+  OTHER
+}
+
+enum SplitType {
+  EQUAL
+  CUSTOM
+}
+
+enum InviteStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+}
+
+enum MemberRole {
+  OWNER
+  EDITOR
+  VIEWER
+}
