@@ -6,9 +6,8 @@
     "moduleDetection": "force",
     "allowJs": true,
 
-    "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
-    "verbatimModuleSyntax": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
     "noEmit": true,
 
     "strict": true,
