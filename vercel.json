@@ -11,7 +11,7 @@
         }
     },
     "functions": {
-        "backend/api/index.ts": {
+        "backend/dist/index.js": {
             "runtime": "nodejs18.x"
         }
     }
