@@ -1,10 +1,10 @@
 {
-    "buildCommand": "cd frontend && bun run build && cd ../backend && bun run build",
-    "outputDirectory": "frontend/dist",
+    "buildCommand": "bun run build",
+    "outputDirectory": "dist",
     "rewrites": [
         {
             "source": "/api/:path*",
-            "destination": "/backend/api/:path*"
+            "destination": "/dist/index.js"
         }
     ]
 }
