@@ -6,10 +6,5 @@
             "source": "/api/:path*",
             "destination": "/backend/api/:path*"
         }
-    ],
-    "functions": {
-        "backend/api/index.ts": {
-            "runtime": "nodejs18.x"
-        }
-    }
+    ]
 }
