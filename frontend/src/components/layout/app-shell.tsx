@@ -4,7 +4,7 @@ import { logout } from "@/store/auth-slice";
 import { useEffect, useState } from "react";
 import api from "@/lib/axios";
 import { toast } from "sonner";
-import { Plane, Settings, LogOut, Mail } from "lucide-react";
+import { Plane, Settings, LogOut } from "lucide-react";
 import { LogoWithText } from "@/components/logo";
 import {
   Sidebar,

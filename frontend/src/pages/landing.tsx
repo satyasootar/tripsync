@@ -1,6 +1,6 @@
 import { Link } from "react-router";
 import { Button } from "@/components/ui/button";
-import { Logo, LogoWithText } from "@/components/logo";
+import { Logo } from "@/components/logo";
 
 export default function LandingPage() {
   return (

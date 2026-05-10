@@ -156,7 +156,9 @@ src/
 - [x] Step 23: Animations and transitions
 - [x] Step 24: Empty states and loading skeletons
 - [x] Step 25: Toast notifications for all mutations
-- [x] Step 26: Final build verification
+- [x] Step 26: Branding Overhaul (Lucide icons, Custom SVG Logo)
+- [x] Step 27: Project Documentation (README, Approach, Learnings, Tech Stack)
+- [x] Step 28: Final build verification
 
 ## Backend Context (For Reference)
 - **Server**: Bun + Express on port 8000
