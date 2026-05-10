@@ -1,7 +1,6 @@
 {
   "name": "backend",
   "private": true,
-  "type": "module",
   "scripts": {
     "dev": "bun run --watch index.ts",
     "start": "bun run index.ts",
