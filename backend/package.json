@@ -1,6 +1,9 @@
 {
   "name": "backend",
   "private": true,
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "scripts": {
     "dev": "bun run --watch index.ts",
     "start": "bun run index.ts",
